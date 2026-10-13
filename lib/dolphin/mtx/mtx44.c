@@ -1,4 +1,4 @@
-#include <assert.h>
+#include "mtx_assert.h"
 #include <math.h>
 #include <dolphin/mtx/mtx44ext.h>
 
@@ -7,9 +7,9 @@ void C_MTXPerspective(Mtx44 m, f32 fovY, f32 aspect, f32 n, f32 f) {
   f32 cot;
   f32 tmp;
 
-  assert(m && "MTXPerspective():  NULL Mtx44Ptr 'm' ");
-  assert((fovY > 0.0) && (fovY < 180.0) && "MTXPerspective():  'fovY' out of range ");
-  assert(0.0f != aspect && "MTXPerspective():  'aspect' is 0 ");
+  MTX_ASSERT(m && "MTXPerspective():  NULL Mtx44Ptr 'm' ");
+  MTX_ASSERT((fovY > 0.0) && (fovY < 180.0) && "MTXPerspective():  'fovY' out of range ");
+  MTX_ASSERT(0.0f != aspect && "MTXPerspective():  'aspect' is 0 ");
 
   angle = (0.5f * fovY);
   angle = MTXDegToRad(angle);

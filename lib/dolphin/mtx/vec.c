@@ -1,29 +1,29 @@
-#include <assert.h>
+#include "mtx_assert.h"
 #include <math.h>
 #include <dolphin/mtx.h>
 #include <dolphin/ppc_math.h>
 
 void C_VECAdd(const Vec* a, const Vec* b, Vec* ab) {
-  assert(a && "VECAdd():  NULL VecPtr 'a' ");
-  assert(b && "VECAdd():  NULL VecPtr 'b' ");
-  assert(ab && "VECAdd():  NULL VecPtr 'ab' ");
+  MTX_ASSERT(a && "VECAdd():  NULL VecPtr 'a' ");
+  MTX_ASSERT(b && "VECAdd():  NULL VecPtr 'b' ");
+  MTX_ASSERT(ab && "VECAdd():  NULL VecPtr 'ab' ");
   ab->x = a->x + b->x;
   ab->y = a->y + b->y;
   ab->z = a->z + b->z;
 }
 
 void C_VECSubtract(const Vec* a, const Vec* b, Vec* a_b) {
-  assert(a && "VECSubtract():  NULL VecPtr 'a' ");
-  assert(b && "VECSubtract():  NULL VecPtr 'b' ");
-  assert(a_b && "VECSubtract():  NULL VecPtr 'a_b' ");
+  MTX_ASSERT(a && "VECSubtract():  NULL VecPtr 'a' ");
+  MTX_ASSERT(b && "VECSubtract():  NULL VecPtr 'b' ");
+  MTX_ASSERT(a_b && "VECSubtract():  NULL VecPtr 'a_b' ");
   a_b->x = a->x - b->x;
   a_b->y = a->y - b->y;
   a_b->z = a->z - b->z;
 }
 
 void C_VECScale(const Vec* src, Vec* dst, f32 scale) {
-  assert(src && "VECScale():  NULL VecPtr 'src' ");
-  assert(dst && "VECScale():  NULL VecPtr 'dst' ");
+  MTX_ASSERT(src && "VECScale():  NULL VecPtr 'src' ");
+  MTX_ASSERT(dst && "VECScale():  NULL VecPtr 'dst' ");
   dst->x = (src->x * scale);
   dst->y = (src->y * scale);
   dst->z = (src->z * scale);
@@ -32,11 +32,11 @@ void C_VECScale(const Vec* src, Vec* dst, f32 scale) {
 void C_VECNormalize(const Vec* src, Vec* unit) {
   f32 mag;
 
-  assert(src && "VECNormalize():  NULL VecPtr 'src' ");
-  assert(unit && "VECNormalize():  NULL VecPtr 'unit' ");
+  MTX_ASSERT(src && "VECNormalize():  NULL VecPtr 'src' ");
+  MTX_ASSERT(unit && "VECNormalize():  NULL VecPtr 'unit' ");
 
   mag = (src->z * src->z) + ((src->x * src->x) + (src->y * src->y));
-  assert(0.0f != mag && "VECNormalize():  zero magnitude vector ");
+  MTX_ASSERT(0.0f != mag && "VECNormalize():  zero magnitude vector ");
 
   mag = 1.0f/ sqrtf(mag);
   unit->x = src->x * mag;
@@ -48,11 +48,11 @@ void PSVECNormalize(const Vec* src, Vec* unit) {
   f32 sqsum;
   f32 rsqrt;
 
-  assert(src && "VECNormalize():  NULL VecPtr 'src' ");
-  assert(unit && "VECNormalize():  NULL VecPtr 'unit' ");
+  MTX_ASSERT(src && "VECNormalize():  NULL VecPtr 'src' ");
+  MTX_ASSERT(unit && "VECNormalize():  NULL VecPtr 'unit' ");
 
   sqsum = (src->z * src->z + src->x * src->x) + src->y * src->y;
-  assert(0.0f != sqsum && "VECNormalize():  zero magnitude vector ");
+  MTX_ASSERT(0.0f != sqsum && "VECNormalize():  zero magnitude vector ");
 
   rsqrt = ppc_rsqrte(sqsum);
   unit->x = src->x * rsqrt;
@@ -63,7 +63,7 @@ void PSVECNormalize(const Vec* src, Vec* unit) {
 f32 C_VECSquareMag(const Vec* v) {
   f32 sqmag;
 
-  assert(v && "VECMag():  NULL VecPtr 'v' ");
+  MTX_ASSERT(v && "VECMag():  NULL VecPtr 'v' ");
 
   sqmag = v->z * v->z + ((v->x * v->x) + (v->y * v->y));
   return sqmag;
@@ -74,7 +74,7 @@ f32 PSVECSquareMag(const Vec* v) {
   f32 yy;
   f32 xx_zz;
 
-  assert(v && "VECMag():  NULL VecPtr 'v' ");
+  MTX_ASSERT(v && "VECMag():  NULL VecPtr 'v' ");
 
   xx = v->x * v->x;
   yy = v->y * v->y;
@@ -98,8 +98,8 @@ f32 PSVECMag(const Vec* v) {
 f32 C_VECDotProduct(const Vec* a, const Vec* b) {
   f32 dot;
 
-  assert(a && "VECDotProduct():  NULL VecPtr 'a' ");
-  assert(b && "VECDotProduct():  NULL VecPtr 'b' ");
+  MTX_ASSERT(a && "VECDotProduct():  NULL VecPtr 'a' ");
+  MTX_ASSERT(b && "VECDotProduct():  NULL VecPtr 'b' ");
   dot = (a->z * b->z) + ((a->x * b->x) + (a->y * b->y));
   return dot;
 }
@@ -107,9 +107,9 @@ f32 C_VECDotProduct(const Vec* a, const Vec* b) {
 void C_VECCrossProduct(const Vec* a, const Vec* b, Vec* axb) {
   Vec vTmp;
 
-  assert(a && "VECCrossProduct():  NULL VecPtr 'a' ");
-  assert(b && "VECCrossProduct():  NULL VecPtr 'b' ");
-  assert(axb && "VECCrossProduct():  NULL VecPtr 'axb' ");
+  MTX_ASSERT(a && "VECCrossProduct():  NULL VecPtr 'a' ");
+  MTX_ASSERT(b && "VECCrossProduct():  NULL VecPtr 'b' ");
+  MTX_ASSERT(axb && "VECCrossProduct():  NULL VecPtr 'axb' ");
 
   vTmp.x = (a->y * b->z) - (a->z * b->y);
   vTmp.y = (a->z * b->x) - (a->x * b->z);
@@ -124,9 +124,9 @@ void C_VECHalfAngle(const Vec* a, const Vec* b, Vec* half) {
   Vec bTmp;
   Vec hTmp;
 
-  assert(a && "VECHalfAngle():  NULL VecPtr 'a' ");
-  assert(b && "VECHalfAngle():  NULL VecPtr 'b' ");
-  assert(half && "VECHalfAngle():  NULL VecPtr 'half' ");
+  MTX_ASSERT(a && "VECHalfAngle():  NULL VecPtr 'a' ");
+  MTX_ASSERT(b && "VECHalfAngle():  NULL VecPtr 'b' ");
+  MTX_ASSERT(half && "VECHalfAngle():  NULL VecPtr 'half' ");
 
   aTmp.x = -a->x;
   aTmp.y = -a->y;
@@ -151,9 +151,9 @@ void C_VECReflect(const Vec* src, const Vec* normal, Vec* dst) {
   Vec uI;
   Vec uN;
 
-  assert(src && "VECReflect():  NULL VecPtr 'src' ");
-  assert(normal && "VECReflect():  NULL VecPtr 'normal' ");
-  assert(dst && "VECReflect():  NULL VecPtr 'dst' ");
+  MTX_ASSERT(src && "VECReflect():  NULL VecPtr 'src' ");
+  MTX_ASSERT(normal && "VECReflect():  NULL VecPtr 'normal' ");
+  MTX_ASSERT(dst && "VECReflect():  NULL VecPtr 'dst' ");
 
   uI.x = -src->x;
   uI.y = -src->y;

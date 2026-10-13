@@ -1013,12 +1013,10 @@ std::string build_shader_source(const ShaderConfig& config, DstAlphaMode dstAlph
     // GX_POINTS: expand single vertex to axis-aligned screen-space square
     vtxXfrAttrsPre +=
         "\n    let clip = vec4f(mv_pos, 1.0) * ubuf.proj;"
-        "\n    let viewport_scale = ubuf.render_viewport_size / max(ubuf.logical_viewport_size, vec2f(1.0));"
-        "\n    let point_size = ubuf.line_width * min(viewport_scale.x, viewport_scale.y);"
         "\n    let x_sign = select(-1.0, 1.0, (vidx & 1u) != 0u);"
         "\n    let y_sign = select(-1.0, 1.0, vidx >= 2u);"
-        "\n    let offset_px = vec2f(x_sign, y_sign) * (point_size / 2.0);"
-        "\n    let offset_ndc = (offset_px * 2.0) / ubuf.render_viewport_size;"
+        "\n    let offset_px = vec2f(x_sign, y_sign) * (ubuf.line_width / 2.0);"
+        "\n    let offset_ndc = (offset_px * 2.0) / max(ubuf.logical_viewport_size, vec2f(1.0));"
         "\n    out.pos = vec4f(clip.xy + offset_ndc * clip.w, clip.zw);";
   } else {
     // GX_LINES / GX_LINESTRIP: expand line segment perpendicular to direction
@@ -1027,13 +1025,12 @@ std::string build_shader_source(const ShaderConfig& config, DstAlphaMode dstAlph
         "\n    let clip_b = vec4f(mv_pos_b, 1.0) * ubuf.proj;"
         "\n    let ndc_a = clip_a.xy / clip_a.w;"
         "\n    let ndc_b = clip_b.xy / clip_b.w;"
-        "\n    let viewport_scale = ubuf.render_viewport_size / max(ubuf.logical_viewport_size, vec2f(1.0));"
-        "\n    let delta_px = (ndc_b - ndc_a) / 2.0 * ubuf.render_viewport_size;"
+        "\n    let logical_size = max(ubuf.logical_viewport_size, vec2f(1.0));"
+        "\n    let delta_px = (ndc_b - ndc_a) / 2.0 * logical_size;"
         "\n    let dir_px = select(vec2f(1.0, 0.0), normalize(delta_px), dot(delta_px, delta_px) > 1e-10);"
         "\n    let perp_px = vec2f(-dir_px.y, dir_px.x);"
-        "\n    let line_width = ubuf.line_width * min(viewport_scale.x, viewport_scale.y);"
-        "\n    let offset_px = perp_px * (line_width / 2.0) * select(-1.0, 1.0, (vidx & 1u) != 0u);"
-        "\n    let offset_ndc = (offset_px * 2.0) / ubuf.render_viewport_size;"
+        "\n    let offset_px = perp_px * (ubuf.line_width / 2.0) * select(-1.0, 1.0, (vidx & 1u) != 0u);"
+        "\n    let offset_ndc = (offset_px * 2.0) / logical_size;"
         "\n    let clip_base = select(clip_a, clip_b, use_b);"
         "\n    out.pos = vec4f(clip_base.xy + offset_ndc * clip_base.w, clip_base.zw);";
   }
@@ -1597,6 +1594,17 @@ std::string build_shader_source(const ShaderConfig& config, DstAlphaMode dstAlph
   }
   if constexpr (EnableNormalVisualization) {
     fragmentFn += "\n    prev = vec4f(in.mv_nrm, prev.a);";
+  }
+
+  switch (static_cast<LogicOpOutput>(config.logicOpOutput)) {
+  case LogicOpOutput::None:
+    break;
+  case LogicOpOutput::One:
+    fragmentFn += "\n    prev = vec4f(1.0);";
+    break;
+  case LogicOpOutput::InvertSrc:
+    fragmentFn += "\n    prev = vec4f(1.0) - clamp(prev, vec4f(0.0), vec4f(1.0));";
+    break;
   }
 
   if (dstAlphaMode == DstAlphaMode::Replace) {

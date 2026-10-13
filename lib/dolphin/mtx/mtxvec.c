@@ -1,12 +1,12 @@
-#include <assert.h>
+#include "mtx_assert.h"
 #include <dolphin/mtx.h>
 
 void C_MTXMultVec(const Mtx m, const Vec* src, Vec* dst) {
   Vec vTmp;
 
-  assert(m && "MTXMultVec():  NULL MtxPtr 'm' ");
-  assert(src && "MTXMultVec():  NULL VecPtr 'src' ");
-  assert(dst && "MTXMultVec():  NULL VecPtr 'dst' ");
+  MTX_ASSERT(m && "MTXMultVec():  NULL MtxPtr 'm' ");
+  MTX_ASSERT(src && "MTXMultVec():  NULL VecPtr 'src' ");
+  MTX_ASSERT(dst && "MTXMultVec():  NULL VecPtr 'dst' ");
 
   vTmp.x = m[0][3] + ((m[0][2] * src->z) + ((m[0][0] * src->x) + (m[0][1] * src->y)));
   vTmp.y = m[1][3] + ((m[1][2] * src->z) + ((m[1][0] * src->x) + (m[1][1] * src->y)));
@@ -20,10 +20,10 @@ void C_MTXMultVecArray(const Mtx m, const Vec* srcBase, Vec* dstBase, u32 count)
   u32 i;
   Vec vTmp;
 
-  assert(m && "MTXMultVecArray():  NULL MtxPtr 'm' ");
-  assert(srcBase && "MTXMultVecArray():  NULL VecPtr 'srcBase' ");
-  assert(dstBase && "MTXMultVecArray():  NULL VecPtr 'dstBase' ");
-  assert(count > 1 && "MTXMultVecArray():  count must be greater than 1.");
+  MTX_ASSERT(m && "MTXMultVecArray():  NULL MtxPtr 'm' ");
+  MTX_ASSERT(srcBase && "MTXMultVecArray():  NULL VecPtr 'srcBase' ");
+  MTX_ASSERT(dstBase && "MTXMultVecArray():  NULL VecPtr 'dstBase' ");
+  MTX_ASSERT(count > 1 && "MTXMultVecArray():  count must be greater than 1.");
 
   for(i = 0; i < count; i++) {
     vTmp.x = m[0][3] + ((m[0][2] * srcBase->z) + ((m[0][0] * srcBase->x) + (m[0][1] * srcBase->y)));
@@ -40,9 +40,9 @@ void C_MTXMultVecArray(const Mtx m, const Vec* srcBase, Vec* dstBase, u32 count)
 void C_MTXMultVecSR(const Mtx m, const Vec* src, Vec* dst) {
   Vec vTmp;
 
-  assert(m && "MTXMultVecSR():  NULL MtxPtr 'm' ");
-  assert(src && "MTXMultVecSR():  NULL VecPtr 'src' ");
-  assert(dst && "MTXMultVecSR():  NULL VecPtr 'dst' ");
+  MTX_ASSERT(m && "MTXMultVecSR():  NULL MtxPtr 'm' ");
+  MTX_ASSERT(src && "MTXMultVecSR():  NULL VecPtr 'src' ");
+  MTX_ASSERT(dst && "MTXMultVecSR():  NULL VecPtr 'dst' ");
 
   vTmp.x = (m[0][2] * src->z) + ((m[0][0] * src->x) + (m[0][1] * src->y));
   vTmp.y = (m[1][2] * src->z) + ((m[1][0] * src->x) + (m[1][1] * src->y));
@@ -56,10 +56,10 @@ void C_MTXMultVecArraySR(const Mtx m, const Vec* srcBase, Vec* dstBase, u32 coun
   u32 i;
   Vec vTmp;
 
-  assert(m && "MTXMultVecArraySR():  NULL MtxPtr 'm' ");
-  assert(srcBase && "MTXMultVecArraySR():  NULL VecPtr 'srcBase' ");
-  assert(dstBase && "MTXMultVecArraySR():  NULL VecPtr 'dstBase' ");
-  assert(count > 1 && "MTXMultVecArraySR():  count must be greater than 1.");
+  MTX_ASSERT(m && "MTXMultVecArraySR():  NULL MtxPtr 'm' ");
+  MTX_ASSERT(srcBase && "MTXMultVecArraySR():  NULL VecPtr 'srcBase' ");
+  MTX_ASSERT(dstBase && "MTXMultVecArraySR():  NULL VecPtr 'dstBase' ");
+  MTX_ASSERT(count > 1 && "MTXMultVecArraySR():  count must be greater than 1.");
 
   for(i = 0; i < count; i++) {
     vTmp.x = (m[0][2] * srcBase->z) + ((m[0][0] * srcBase->x) + (m[0][1] * srcBase->y));
@@ -78,9 +78,9 @@ void C_MTXROMultVecArray(const ROMtx m, const Vec *srcBase, Vec *dstBase, u32 co
   u32 i;
   Vec vTmp;
 
-  assert(m && "MTXROMultVecArray():  NULL MtxPtr 'm' ");
-  assert(srcBase && "MTXROMultVecArray():  NULL VecPtr 'srcBase' ");
-  assert(dstBase && "MTXROMultVecArray():  NULL VecPtr 'dstBase' ");
+  MTX_ASSERT(m && "MTXROMultVecArray():  NULL MtxPtr 'm' ");
+  MTX_ASSERT(srcBase && "MTXROMultVecArray():  NULL VecPtr 'srcBase' ");
+  MTX_ASSERT(dstBase && "MTXROMultVecArray():  NULL VecPtr 'dstBase' ");
 
   for(i = 0; i < count; i++) {
     vTmp.x = (m[0][0] * srcBase->x) + (m[1][0] * srcBase->y) + (m[2][0] * srcBase->z) + m[3][0];
