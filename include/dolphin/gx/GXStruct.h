@@ -33,7 +33,10 @@ typedef enum {
   VI_TVMODE_MPAL_DS = VI_TVMODE(VI_MPAL, VI_NON_INTERLACE),
   VI_TVMODE_DEBUG_INT = VI_TVMODE(VI_DEBUG, VI_INTERLACE),
   VI_TVMODE_DEBUG_PAL_INT = VI_TVMODE(VI_DEBUG_PAL, VI_INTERLACE),
-  VI_TVMODE_DEBUG_PAL_DS = VI_TVMODE(VI_DEBUG_PAL, VI_NON_INTERLACE)
+  VI_TVMODE_DEBUG_PAL_DS = VI_TVMODE(VI_DEBUG_PAL, VI_NON_INTERLACE),
+#if TARGET_PC
+  VI_TVMODE_INVALID = -1,
+#endif
 } VITVMode;
 
 typedef enum { VI_XFBMODE_SF = 0, VI_XFBMODE_DF } VIXFBMode;
@@ -108,9 +111,8 @@ typedef struct _GXTlutRegion {
   u32 dummy[4];
 } GXTlutRegion;
 
-typedef struct _GXFogAdjTable
-{
-    u16 r[10];
+typedef struct _GXFogAdjTable {
+  u16 r[10];
 } GXFogAdjTable;
 
 #ifdef __cplusplus
