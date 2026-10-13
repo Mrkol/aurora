@@ -493,12 +493,15 @@ struct AttrConfig {
 
 enum class DstAlphaMode : u8 { None, Replace, DualSource };
 
+enum class LogicOpOutput : u8 { None, One, InvertSrc };
+
 struct ShaderConfig {
   u8 fogType = GX_FOG_NONE;
   u8 vtxStride = 0;
   u8 lineMode : 2 = 0; // 1 = GX_LINES, 2 = GX_LINESTRIP, 3 = GX_POINTS
   u8 fogRangeEnabled : 1 = false;
-  u8 pad1 : 5 = 0;
+  u8 logicOpOutput : 2 = 0;
+  u8 pad1 : 3 = 0;
   u8 pad2 = 0;
   std::array<AttrConfig, MaxVtxAttr> attrs;
   std::array<TevSwap, MaxTevSwap> tevSwapTable;

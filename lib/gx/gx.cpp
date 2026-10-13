@@ -154,6 +154,21 @@ wgpu::BlendState to_blend_state(GXBlendMode mode, GXBlendFactor srcFac, GXBlendF
           .dstFactor = wgpu::BlendFactor::One,
       };
       break;
+    case GX_LO_SET:
+    case GX_LO_INVCOPY:
+      colorBlendComponent = {
+          .operation = wgpu::BlendOperation::Add,
+          .srcFactor = wgpu::BlendFactor::One,
+          .dstFactor = wgpu::BlendFactor::Zero,
+      };
+      break;
+    case GX_LO_INV:
+      colorBlendComponent = {
+          .operation = wgpu::BlendOperation::Subtract,
+          .srcFactor = wgpu::BlendFactor::One,
+          .dstFactor = wgpu::BlendFactor::One,
+      };
+      break;
     }
     break;
   }
@@ -458,6 +473,19 @@ void populate_pipeline_config(PipelineConfig& config, GXPrimitive primitive, GXV
   }
   if (g_gxState.alphaCompare) {
     config.shaderConfig.alphaCompare = g_gxState.alphaCompare;
+  }
+  if (g_gxState.blendMode == GX_BM_LOGIC) {
+    switch (g_gxState.blendOp) {
+    case GX_LO_SET:
+    case GX_LO_INV:
+      config.shaderConfig.logicOpOutput = static_cast<u8>(LogicOpOutput::One);
+      break;
+    case GX_LO_INVCOPY:
+      config.shaderConfig.logicOpOutput = static_cast<u8>(LogicOpOutput::InvertSrc);
+      break;
+    default:
+      break;
+    }
   }
   const auto cullMode = config.shaderConfig.lineMode == 0 ? g_gxState.cullMode : GX_CULL_NONE;
   const auto [polygonOffset, polygonOffsetScale] = polygon_offset_for_cull_mode(cullMode);

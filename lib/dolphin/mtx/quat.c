@@ -1,11 +1,11 @@
-#include <assert.h>
+#include "mtx_assert.h"
 #include <math.h>
 #include <dolphin/mtx.h>
 
 void C_QUATAdd(const Quaternion* p, const Quaternion* q, Quaternion* r) {
-  assert(p && "QUATAdd():  NULL QuaternionPtr 'p' ");
-  assert(q && "QUATAdd():  NULL QuaternionPtr 'q' ");
-  assert(r && "QUATAdd():  NULL QuaternionPtr 'r' ");
+  MTX_ASSERT(p && "QUATAdd():  NULL QuaternionPtr 'p' ");
+  MTX_ASSERT(q && "QUATAdd():  NULL QuaternionPtr 'q' ");
+  MTX_ASSERT(r && "QUATAdd():  NULL QuaternionPtr 'r' ");
 
   r->x = p->x + q->x;
   r->y = p->y + q->y;
@@ -14,9 +14,9 @@ void C_QUATAdd(const Quaternion* p, const Quaternion* q, Quaternion* r) {
 }
 
 void C_QUATSubtract(const Quaternion* p, const Quaternion* q, Quaternion* r) {
-  assert(p && "QUATSubtract():  NULL QuaternionPtr 'p' ");
-  assert(q && "QUATSubtract():  NULL QuaternionPtr 'q' ");
-  assert(r && "QUATSubtract():  NULL QuaternionPtr 'r' ");
+  MTX_ASSERT(p && "QUATSubtract():  NULL QuaternionPtr 'p' ");
+  MTX_ASSERT(q && "QUATSubtract():  NULL QuaternionPtr 'q' ");
+  MTX_ASSERT(r && "QUATSubtract():  NULL QuaternionPtr 'r' ");
 
   r->x = p->x - q->x;
   r->y = p->y - q->y;
@@ -28,9 +28,9 @@ void C_QUATMultiply(const Quaternion* p, const Quaternion* q, Quaternion* pq) {
   Quaternion* r;
   Quaternion pqTmp;
 
-  assert(p && "QUATMultiply():  NULL QuaternionPtr 'p' ");
-  assert(q && "QUATMultiply():  NULL QuaternionPtr 'q' ");
-  assert(pq && "QUATMultiply():  NULL QuaternionPtr 'pq' ");
+  MTX_ASSERT(p && "QUATMultiply():  NULL QuaternionPtr 'p' ");
+  MTX_ASSERT(q && "QUATMultiply():  NULL QuaternionPtr 'q' ");
+  MTX_ASSERT(pq && "QUATMultiply():  NULL QuaternionPtr 'pq' ");
 
   if (p == pq || q == pq){
     r = &pqTmp;
@@ -50,17 +50,17 @@ void C_QUATMultiply(const Quaternion* p, const Quaternion* q, Quaternion* pq) {
 
 void C_QUATDivide(const Quaternion* p, const Quaternion* q, Quaternion* r) {
   Quaternion qtmp;
-  assert(p && "QUATDivide():  NULL QuaternionPtr 'p' ");
-  assert(q && "QUATDivide():  NULL QuaternionPtr 'q' ");
-  assert(r && "QUATDivide():  NULL QuaternionPtr 'r' ");
+  MTX_ASSERT(p && "QUATDivide():  NULL QuaternionPtr 'p' ");
+  MTX_ASSERT(q && "QUATDivide():  NULL QuaternionPtr 'q' ");
+  MTX_ASSERT(r && "QUATDivide():  NULL QuaternionPtr 'r' ");
 
   C_QUATInverse(q, &qtmp);
   C_QUATMultiply(&qtmp, p, r);
 }
 
 void C_QUATScale(const Quaternion* q, Quaternion* r, f32 scale) {
-  assert(q && "QUATScale():  NULL QuaternionPtr 'q' ");
-  assert(r && "QUATScale():  NULL QuaternionPtr 'r' ");
+  MTX_ASSERT(q && "QUATScale():  NULL QuaternionPtr 'q' ");
+  MTX_ASSERT(r && "QUATScale():  NULL QuaternionPtr 'r' ");
 
   r->x = q->x * scale;
   r->y = q->y * scale;
@@ -69,16 +69,16 @@ void C_QUATScale(const Quaternion* q, Quaternion* r, f32 scale) {
 }
 
 f32 C_QUATDotProduct(const Quaternion* p, const Quaternion* q) {
-  assert(p && "QUATDotProduct():  NULL QuaternionPtr 'p' ");
-  assert(q && "QUATDotProduct():  NULL QuaternionPtr 'q' ");
+  MTX_ASSERT(p && "QUATDotProduct():  NULL QuaternionPtr 'p' ");
+  MTX_ASSERT(q && "QUATDotProduct():  NULL QuaternionPtr 'q' ");
 
   return (q->x * p->x) + (q->y * p->y) + (q->z * p->z) + (q->w * p->w);
 }
 
 void C_QUATNormalize(const Quaternion* src, Quaternion* unit) {
   f32 mag;
-  assert(src && "QUATNormalize():  NULL QuaternionPtr 'src' ");
-  assert(unit && "QUATNormalize():  NULL QuaternionPtr 'unit' ");
+  MTX_ASSERT(src && "QUATNormalize():  NULL QuaternionPtr 'src' ");
+  MTX_ASSERT(unit && "QUATNormalize():  NULL QuaternionPtr 'unit' ");
 
   mag = (src->x * src->x) + (src->y * src->y) + (src->z * src->z) + (src->w * src->w);
   if (mag >= 0.00001f) {
@@ -95,8 +95,8 @@ void C_QUATNormalize(const Quaternion* src, Quaternion* unit) {
 
 void C_QUATInverse(const Quaternion* src, Quaternion* inv) {
   f32 mag, norminv;
-  assert(src && "QUATInverse():  NULL QuaternionPtr 'src' ");
-  assert(inv && "QUATInverse():  NULL QuaternionPtr 'inv' ");
+  MTX_ASSERT(src && "QUATInverse():  NULL QuaternionPtr 'src' ");
+  MTX_ASSERT(inv && "QUATInverse():  NULL QuaternionPtr 'inv' ");
 
   mag = (src->x * src->x) + (src->y * src->y) + (src->z * src->z) + (src->w * src->w);
   if (mag == 0.0f) {
@@ -112,9 +112,9 @@ void C_QUATInverse(const Quaternion* src, Quaternion* inv) {
 
 void C_QUATExp(const Quaternion* q, Quaternion* r)  {
   f32 theta, scale;
-  assert(q && "QUATExp():  NULL QuaternionPtr 'q' ");
-  assert(r && "QUATExp():  NULL QuaternionPtr 'r' ");
-  assert(q->w == 0.0f && "QUATExp():  'q' is not a pure quaternion. ");
+  MTX_ASSERT(q && "QUATExp():  NULL QuaternionPtr 'q' ");
+  MTX_ASSERT(r && "QUATExp():  NULL QuaternionPtr 'r' ");
+  MTX_ASSERT(q->w == 0.0f && "QUATExp():  'q' is not a pure quaternion. ");
 
   theta = sqrtf((q->x * q->x) + (q->y * q->y) + (q->z * q->z));
   scale = 1.0f;
@@ -131,8 +131,8 @@ void C_QUATExp(const Quaternion* q, Quaternion* r)  {
 
 void C_QUATLogN(const Quaternion* q, Quaternion* r) {
   f32 theta, scale;
-  assert(q && "QUATLogN():  NULL QuaternionPtr 'q' ");
-  assert(r && "QUATLogN():  NULL QuaternionPtr 'r' ");
+  MTX_ASSERT(q && "QUATLogN():  NULL QuaternionPtr 'q' ");
+  MTX_ASSERT(r && "QUATLogN():  NULL QuaternionPtr 'r' ");
 
   scale = (q->x * q->x) + (q->y * q->y) + (q->z * q->z);
 
@@ -152,9 +152,9 @@ void C_QUATLogN(const Quaternion* q, Quaternion* r) {
 
 void C_QUATMakeClosest(const Quaternion* q, const Quaternion* qto, Quaternion* r) {
   f32 dot;
-  assert(q && "QUATMakeClosest():  NULL QuaternionPtr 'q' ");
-  assert(qto && "QUATMakeClosest():  NULL QuaternionPtr 'qto' ");
-  assert(r && "QUATMakeClosest():  NULL QuaternionPtr 'r' ");
+  MTX_ASSERT(q && "QUATMakeClosest():  NULL QuaternionPtr 'q' ");
+  MTX_ASSERT(qto && "QUATMakeClosest():  NULL QuaternionPtr 'qto' ");
+  MTX_ASSERT(r && "QUATMakeClosest():  NULL QuaternionPtr 'r' ");
 
   dot = (q->x * qto->x) + (q->y * qto->y) + (q->z * qto->z) + (q->w * qto->w);
   if (dot < 0.0f) {
@@ -171,8 +171,8 @@ void C_QUATRotAxisRad(Quaternion* r, const Vec* axis, f32 rad) {
   f32 half, sh, ch;
   Vec nAxis;
 
-  assert(r && "QUATRotAxisRad():  NULL QuaternionPtr 'r' ");
-  assert(axis && "QUATRotAxisRad():  NULL VecPtr 'axis' ");
+  MTX_ASSERT(r && "QUATRotAxisRad():  NULL QuaternionPtr 'r' ");
+  MTX_ASSERT(axis && "QUATRotAxisRad():  NULL VecPtr 'axis' ");
 
   VECNormalize(axis, &nAxis);
 
@@ -192,8 +192,8 @@ void C_QUATMtx(Quaternion* r, const Mtx m) {
   s32 nxt[3] = {1, 2, 0};
   f32 q[3];
 
-  assert(r && "QUATMtx():  NULL QuaternionPtr 'r' ");
-  assert(m && "QUATMtx():  NULL MtxPtr 'm' ");
+  MTX_ASSERT(r && "QUATMtx():  NULL QuaternionPtr 'r' ");
+  MTX_ASSERT(m && "QUATMtx():  NULL MtxPtr 'm' ");
 
   tr = m[0][0] + m[1][1] + m[2][2];
   if (tr > 0.0f) {
@@ -235,9 +235,9 @@ void C_QUATMtx(Quaternion* r, const Mtx m) {
 }
 
 void C_QUATLerp(const Quaternion* p, const Quaternion* q, Quaternion* r, f32 t) {
-  assert(p && "QUATLerp():  NULL QuaternionPtr 'p' ");
-  assert(q && "QUATLerp():  NULL QuaternionPtr 'q' ");
-  assert(r && "QUATLerp():  NULL QuaternionPtr 'r' ");
+  MTX_ASSERT(p && "QUATLerp():  NULL QuaternionPtr 'p' ");
+  MTX_ASSERT(q && "QUATLerp():  NULL QuaternionPtr 'q' ");
+  MTX_ASSERT(r && "QUATLerp():  NULL QuaternionPtr 'r' ");
 
   r->x = t * (q->x - p->x) + p->x;
   r->y = t * (q->y - p->y) + p->y;
@@ -249,9 +249,9 @@ void C_QUATSlerp(const Quaternion* p, const Quaternion* q, Quaternion* r, f32 t)
     f32 theta, sin_th, cos_th;
     f32 tp, tq;
 
-    assert(p && "QUATSlerp():  NULL QuaternionPtr 'p' ");
-    assert(q && "QUATSlerp():  NULL QuaternionPtr 'q' ");
-    assert(r && "QUATSlerp():  NULL QuaternionPtr 'r' ");
+    MTX_ASSERT(p && "QUATSlerp():  NULL QuaternionPtr 'p' ");
+    MTX_ASSERT(q && "QUATSlerp():  NULL QuaternionPtr 'q' ");
+    MTX_ASSERT(r && "QUATSlerp():  NULL QuaternionPtr 'r' ");
 
     cos_th = p->x * q->x + p->y * q->y + p->z * q->z + p->w * q->w;
     tq = 1.0f;
@@ -282,11 +282,11 @@ void C_QUATSquad(const Quaternion* p, const Quaternion* a, const Quaternion* b, 
     Quaternion pq, ab;
     f32 t2;
 
-    assert(p && "QUATSquad():  NULL QuaternionPtr 'p' ");
-    assert(a && "QUATSquad():  NULL QuaternionPtr 'a' ");
-    assert(b && "QUATSquad():  NULL QuaternionPtr 'b' ");
-    assert(q && "QUATSquad():  NULL QuaternionPtr 'q' ");
-    assert(r && "QUATSquad():  NULL QuaternionPtr 'r' ");
+    MTX_ASSERT(p && "QUATSquad():  NULL QuaternionPtr 'p' ");
+    MTX_ASSERT(a && "QUATSquad():  NULL QuaternionPtr 'a' ");
+    MTX_ASSERT(b && "QUATSquad():  NULL QuaternionPtr 'b' ");
+    MTX_ASSERT(q && "QUATSquad():  NULL QuaternionPtr 'q' ");
+    MTX_ASSERT(r && "QUATSquad():  NULL QuaternionPtr 'r' ");
 
     t2 = 2.0f * t * (1.0f - t);
     C_QUATSlerp(p, q, &pq, t);
@@ -297,10 +297,10 @@ void C_QUATSquad(const Quaternion* p, const Quaternion* a, const Quaternion* b, 
 void C_QUATCompA(const Quaternion* qprev, const Quaternion* q, const Quaternion* qnext, Quaternion* a) {
     Quaternion qm, qp, lqm, lqp, qpqm, exq;
 
-    assert(qprev && "QUATCompA():  NULL QuaternionPtr 'qprev' ");
-    assert(q && "QUATCompA():  NULL QuaternionPtr 'q' ");
-    assert(qnext && "QUATCompA():  NULL QuaternionPtr 'qnext' ");
-    assert(a && "QUATCompA():  NULL QuaternionPtr 'a' ");
+    MTX_ASSERT(qprev && "QUATCompA():  NULL QuaternionPtr 'qprev' ");
+    MTX_ASSERT(q && "QUATCompA():  NULL QuaternionPtr 'q' ");
+    MTX_ASSERT(qnext && "QUATCompA():  NULL QuaternionPtr 'qnext' ");
+    MTX_ASSERT(a && "QUATCompA():  NULL QuaternionPtr 'a' ");
 
     C_QUATDivide(qprev, q, &qm);
     C_QUATLogN(&qm, &lqm);
