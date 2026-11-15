@@ -1599,6 +1599,17 @@ std::string build_shader_source(const ShaderConfig& config, DstAlphaMode dstAlph
     fragmentFn += "\n    prev = vec4f(in.mv_nrm, prev.a);";
   }
 
+  switch (static_cast<LogicOpOutput>(config.logicOpOutput)) {
+  case LogicOpOutput::None:
+    break;
+  case LogicOpOutput::One:
+    fragmentFn += "\n    prev = vec4f(1.0);";
+    break;
+  case LogicOpOutput::InvertSrc:
+    fragmentFn += "\n    prev = vec4f(1.0) - clamp(prev, vec4f(0.0), vec4f(1.0));";
+    break;
+  }
+
   if (dstAlphaMode == DstAlphaMode::Replace) {
     // GX destination alpha is set via the blend constant
     fragmentFn += "\n    prev.a = 1.0;";
